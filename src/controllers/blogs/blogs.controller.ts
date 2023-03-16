@@ -40,10 +40,7 @@ export const BlogsList = async (req: Request, res: Response) => {
 };
 export const AddBlog = async (req: Request, res: Response) => {
     const { blogTitle, description, author, link, source } = req.body;
-
-
     console.log("Add Blog")
-    console.log(req.body)
 
     try {
         const createdBlog = new Blogs({ blogTitle, description, author, link, source })
@@ -91,23 +88,31 @@ export const FindOne = async (req: Request, res: Response) => {
 };
 
 export const EditBlog = async (req: Request, res: Response) => {
-    const { blogTitle, description, author, link, source, Blog_uuid } = req.body;
-
+    const { id, blogTitle, description, author, link, source } = req.body;
     console.log("Edit BLog")
 
     try {
-        const numan = await Blogs.updateOne({ Blog_uuid: Blog_uuid }, {
-            blogTitle: blogTitle,
-            author: author,
-            description: description,
-            link: link,
-            source: source
-        })
-
-        return res.status(200).json({
-            success: true,
-            message: 'SuccessFully to Edit'
-        });
+        if (id) {
+            await Blogs.findByIdAndUpdate(id, {
+                blogTitle: blogTitle,
+                author: author,
+                description: description,
+                link: link,
+                source: source
+            }, (err, result) => {
+                if (err)
+                    res.send(err)
+            })
+            return res.status(200).json({
+                success: true,
+                message: 'SuccessFully to Edit'
+            });
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: 'Id is Null to Edit'
+            });
+        }
     } catch (error) {
         logger.error({
             level: 'debug',
