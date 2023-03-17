@@ -11,6 +11,8 @@ export const BlogsList = async (req: Request, res: Response) => {
                 "$project": {
                     "_id": 1,
                     "blogTitle": 1,
+                    "blogCategory": 1,
+                    "blogImage": 1,
                     "description": 1,
                     "author": 1,
                     "source": 1,
@@ -39,14 +41,14 @@ export const BlogsList = async (req: Request, res: Response) => {
 
 };
 export const AddBlog = async (req: Request, res: Response) => {
-    const { blogTitle, description, author, link, source } = req.body;
+    const { blogTitle, description, author, link, source, blogCategory } = req.body;
     console.log("Add Blog")
 
     try {
-        const createdBlog = new Blogs({ blogTitle, description, author, link, source })
+        const createdBlog = new Blogs({ blogTitle, blogCategory, description, author, link, source, blogImage: req.file?.path })
         await createdBlog.save();
         return res.status(200).json({
-            success: false,
+            success: true,
             message: 'Blog Added Successfully'
         });
 
@@ -88,25 +90,27 @@ export const FindOne = async (req: Request, res: Response) => {
 };
 
 export const EditBlog = async (req: Request, res: Response) => {
-    const { id, blogTitle, description, author, link, source } = req.body;
+    const { id, blogTitle, description, author, link, source, blogCategory } = req.body;
     console.log("Edit BLog")
 
     try {
         if (id) {
             await Blogs.findByIdAndUpdate(id, {
-                blogTitle: blogTitle,
-                author: author,
-                description: description,
-                link: link,
-                source: source
+            blogTitle: blogTitle,
+            blogCategory,
+            author: author,
+            description: description,
+            link: link,
+            blogImage: req.file?.path,
+            source: source
             }, (err, result) => {
                 if (err)
                     res.send(err)
-            })
-            return res.status(200).json({
-                success: true,
-                message: 'SuccessFully to Edit'
-            });
+        })
+        return res.status(200).json({
+            success: true,
+            message: 'SuccessFully to Edit'
+        });
         } else {
             return res.status(200).json({
                 success: false,

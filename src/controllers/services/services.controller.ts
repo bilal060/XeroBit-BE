@@ -14,6 +14,7 @@ export const ServicesList = async (req: Request, res: Response) => {
                     "description": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
+                    "serviceImage": 1
                 }
             }
         ])
@@ -39,7 +40,7 @@ export const AddServices = async (req: Request, res: Response) => {
     const { serviceTitle, description } = req.body;
     console.log("Add services")
     try {
-        const createdservices = new Services({ serviceTitle, description })
+        const createdservices = new Services({ serviceTitle, description, serviceImage: req.file?.path })
         await createdservices.save();
         return res.status(200).json({
             success: false,
@@ -87,6 +88,7 @@ export const Editservices = async (req: Request, res: Response) => {
             await Services.findByIdAndUpdate(id, {
                 servicesTitle: servicesTitle,
                 description: description,
+                serviceImage: req.file?.path
             }, (err, result) => {
                 if (err)
                     res.send(err)

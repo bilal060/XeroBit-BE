@@ -10,6 +10,8 @@ export interface Iservices extends ITimeStampedDocument {
     serviceTitle: string;
     // service Description
     description: string
+    // service Top Image
+    serviceImage: string
 }
 
 interface IservicesModel extends Model<Iservices> { }
@@ -17,6 +19,7 @@ interface IservicesModel extends Model<Iservices> { }
 const schema = new Schema<Iservices>({
     serviceTitle: { type: String, required: true },
     description: { type: String, required: true },
+    serviceImage: { type: String, required: true },
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
