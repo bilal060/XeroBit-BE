@@ -17,6 +17,8 @@ export const BlogsList = async (req: Request, res: Response) => {
                     "source": 1,
                     "links": 1,
                     "blogImage": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1
                 }
             }
         ])

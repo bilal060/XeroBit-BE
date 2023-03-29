@@ -1,28 +1,29 @@
 import { Request, Response } from 'express';
 import logger from '../../logger';
-import Services from '../../models/services';
+import ContactUs from '../../models/contact-us';
+import { v4 } from 'uuid'
 
-export const ServicesList = async (req: Request, res: Response) => {
-    console.log("services List")
+export const ContactUsList = async (req: Request, res: Response) => {
+    console.log("Blog List")
     try {
-        const services = await Services.aggregate([
+        const contact = await ContactUs.aggregate([
             {
                 "$project": {
                     "_id": 1,
-                    "serviceTitle": 1,
-                    "serviceCategory": 1,
-                    "description": 1,
-                    "source": 1,
-                    "links": 1,
-                    "serviceImage": 1,
+                    "firstName": 1,
+                    "lastName": 1,
+                    "massage": 1,
+                    "phoneNo": 1,
+                    "email": 1,
+                    "visit": 1,
                     "createdAt": 1,
                     "updatedAt": 1
                 }
             }
         ])
         return res.status(200).json({
-            total: services.length,
-            services
+            total: contact.length,
+            contact
         }
         );
     } catch (error) {
@@ -31,6 +32,7 @@ export const ServicesList = async (req: Request, res: Response) => {
             message: `${'Cant Find'} , ${error}`,
             consoleLoggerOptions: { label: 'API' }
         });
+
         return res.status(404).json({
             success: false,
             message: 'Cant Find'
@@ -38,23 +40,26 @@ export const ServicesList = async (req: Request, res: Response) => {
     }
 
 };
-export const AddServices = async (req: Request, res: Response) => {
-    const { serviceTitle, serviceCategory, description, source, links } = req.body;
-    console.log("Add services")
+export const AddContactUs = async (req: Request, res: Response) => {
+    const { firstName, lastName, massage, phoneNo, email, visit } = req.body;
+    console.log("Add Blog")
+
     try {
-        const createdservices = new Services({
-            serviceTitle: serviceTitle,
-            serviceCategory: serviceCategory,
-            description: description,
-            source: source,
-            links: links,
-            serviceImage: req.file?.path
+        const created = new ContactUs({
+            firstName: firstName,
+            lastName: lastName,
+            massage: massage,
+            phoneNo: phoneNo,
+            email: email,
+            visit: visit,
+
         })
-        await createdservices.save();
+        await created.save();
         return res.status(200).json({
-            success: false,
-            message: 'services Added Successfully'
+            success: true,
+            message: 'Blog Added Successfully'
         });
+
     } catch (error) {
         logger.error({
             level: 'debug',
@@ -69,11 +74,12 @@ export const AddServices = async (req: Request, res: Response) => {
 
 };
 export const FindOne = async (req: Request, res: Response) => {
+    console.log(req.params['0'])
     const id = req.params['0']
     try {
-        const services = await Services.findById(id)
+        const contact = await ContactUs.findById(id)
         return res.status(200).json(
-            services
+            contact
         );
     } catch (error) {
         logger.error({
@@ -81,6 +87,7 @@ export const FindOne = async (req: Request, res: Response) => {
             message: `${'Cant Find'} , ${error}`,
             consoleLoggerOptions: { label: 'API' }
         });
+
         return res.status(404).json({
             success: false,
             message: 'Cant Find'
@@ -89,25 +96,26 @@ export const FindOne = async (req: Request, res: Response) => {
 
 };
 
-export const Editservices = async (req: Request, res: Response) => {
-    const { id, serviceTitle, serviceCategory, description, source, links } = req.body;
-    console.log("Edit services")
+export const EditContactUs = async (req: Request, res: Response) => {
+    const { id, firstName, lastName, massage, phoneNo, email, visit } = req.body;
+    console.log("Edit BLog")
+
     try {
         if (id) {
-            await Services.findByIdAndUpdate(id, {
-                serviceTitle: serviceTitle,
-                serviceCategory: serviceCategory,
-                description: description,
-                source: source,
-                links: links,
-                // serviceImage: req.file?.path
+            await ContactUs.findByIdAndUpdate(id, {
+                firstName: firstName,
+                lastName: lastName,
+                massage: massage,
+                phoneNo: phoneNo,
+                email: email,
+                visit: visit
             }, (err, result) => {
                 if (err)
                     res.send(err)
             })
             return res.status(200).json({
                 success: true,
-                message: 'SuccessFully Edit'
+                message: 'SuccessFully to Edit'
             });
         } else {
             return res.status(200).json({
@@ -128,10 +136,10 @@ export const Editservices = async (req: Request, res: Response) => {
     }
 };
 
-export const DeleteService = async (req: Request, res: Response) => {
+export const DeleteContactUs = async (req: Request, res: Response) => {
     const id = req.params['0']
     try {
-        const del = await Services.deleteOne({ _id: id });
+        const del = await ContactUs.deleteOne({ _id: id });
         console.log(del)
         return res.status(200).json(
             del

@@ -17,6 +17,8 @@ export const ProjectsList = async (req: Request, res: Response) => {
                     "source": 1,
                     "links": 1,
                     "projectImage": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1
                 }
             }
         ])
