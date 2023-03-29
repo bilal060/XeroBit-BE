@@ -9,5 +9,6 @@ router.route('').get(servicesController.ServicesList);
 router.route('/add').post(authMiddleware.isAuthorized, authMiddleware.isAdmin, upload.single('serviceImage'), servicesController.AddServices);
 router.route('/edit').post(authMiddleware.isAuthorized, authMiddleware.isAdmin, upload.single('serviceImage'), servicesController.Editservices);
 router.route('/*').get(servicesController.FindOne);
+router.route('/*').delete(authMiddleware.isAuthorized, authMiddleware.isAdmin, servicesController.DeleteService);
 
 export default router

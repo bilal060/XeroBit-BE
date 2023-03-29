@@ -5,6 +5,7 @@ import * as authMiddleware from '../../middleware/auth'
 const router = Router();
 
 router.route('/all').get(authMiddleware.isAuthorized, authMiddleware.isAdmin, AccountController.getAllAccounts);
-router.route('/add-account').post(AccountController.AddAccount);
+router.route('/delete-account').delete(authMiddleware.isAuthorized, authMiddleware.isAdmin, AccountController.DeleteAccount);
+router.route('/add-account').post(authMiddleware.isAuthorized, authMiddleware.isAdmin, AccountController.AddAccount);
 
 export default router

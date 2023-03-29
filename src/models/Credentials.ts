@@ -16,7 +16,6 @@ export interface ICredentials extends ITimeStampedDocument {
   resetPasswordToken: string;
   /** resetPasswordExpires */
   resetPasswordExpires: Number;
-  isDeleted: Boolean;
 
 }
 
@@ -30,7 +29,6 @@ const schema = new Schema<ICredentials>({
   },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Number },
-  isDeleted: { type: Boolean, default: false }
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch

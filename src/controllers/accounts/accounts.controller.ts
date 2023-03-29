@@ -95,4 +95,26 @@ export const getAllAccounts = async (req: Request, res: Response) => {
   }
 };
 
+export const DeleteAccount = async (req: Request, res: Response) => {
+  const { id } = req.body;
 
+  console.log('Delete account')
+
+
+  try {
+    const del = await Accounts.deleteOne({ _id: id })
+    return res.status(200).json(
+      del
+    );
+  } catch (error) {
+    logger.error({
+      level: 'debug',
+      message: `${'Cant Find'} , ${error}`,
+      consoleLoggerOptions: { label: 'API' }
+    });
+    return res.status(404).json({
+      success: false,
+      message: 'Cant Find'
+    });
+  }
+};

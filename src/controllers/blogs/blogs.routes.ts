@@ -9,5 +9,6 @@ router.route('').get(BlogController.BlogsList);
 router.route('/add').post(authMiddleware.isAuthorized, authMiddleware.isAdmin, upload.single('blogImage'), BlogController.AddBlog);
 router.route('/edit').post(authMiddleware.isAuthorized, authMiddleware.isAdmin, upload.single('blogImage'), BlogController.EditBlog);
 router.route('/*').get(BlogController.FindOne);
+router.route('/*').delete(authMiddleware.isAuthorized, authMiddleware.isAdmin, BlogController.DeleteBlog);
 
 export default router

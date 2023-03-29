@@ -1,28 +1,28 @@
 import { Request, Response } from 'express';
 import logger from '../../logger';
-import Blogs from '../../models/Blogs';
 import { v4 } from 'uuid'
+import Projects from '../../models/Projects';
 
-export const BlogsList = async (req: Request, res: Response) => {
-    console.log("Blog List")
+export const ProjectsList = async (req: Request, res: Response) => {
+    console.log("projects List")
     try {
-        const blogs = await Blogs.aggregate([
+        const projects = await Projects.aggregate([
             {
                 "$project": {
                     "_id": 1,
-                    "blogTitle": 1,
-                    "blogCategory": 1,
+                    "projectTitle": 1,
+                    "projectCategory": 1,
                     "description": 1,
                     "author": 1,
                     "source": 1,
                     "links": 1,
-                    "blogImage": 1,
+                    "projectImage": 1,
                 }
             }
         ])
         return res.status(200).json({
-            total: blogs.length,
-            blogs
+            total: projects.length,
+            projects
         }
         );
     } catch (error) {
@@ -31,7 +31,6 @@ export const BlogsList = async (req: Request, res: Response) => {
             message: `${'Cant Find'} , ${error}`,
             consoleLoggerOptions: { label: 'API' }
         });
-
         return res.status(404).json({
             success: false,
             message: 'Cant Find'
@@ -39,26 +38,25 @@ export const BlogsList = async (req: Request, res: Response) => {
     }
 
 };
-export const AddBlog = async (req: Request, res: Response) => {
-    const { blogTitle, blogCategory, description, author, source, links, } = req.body;
-    console.log("Add Blog")
+export const Addprojects = async (req: Request, res: Response) => {
+    const { projectTitle, projectCategory, description, author, source, links } = req.body;
+    console.log("Add projects")
 
     try {
-        const createdBlog = new Blogs({
-            blogTitle: blogTitle,
-            blogCategory: blogCategory,
+        const createdprojects = new Projects({
+            projectTitle: projectTitle,
+            projectCategory: projectCategory,
             description: description,
             author: author,
             source: source,
             links: links,
-            blogImage: req.file?.path
+            projectImage: req.file?.path
         })
-        await createdBlog.save();
+        await createdprojects.save();
         return res.status(200).json({
-            success: true,
-            message: 'Blog Added Successfully'
+            success: false,
+            message: 'projects Added Successfully'
         });
-
     } catch (error) {
         logger.error({
             level: 'debug',
@@ -73,12 +71,11 @@ export const AddBlog = async (req: Request, res: Response) => {
 
 };
 export const FindOne = async (req: Request, res: Response) => {
-    console.log(req.params['0'])
     const id = req.params['0']
     try {
-        const blog = await Blogs.findById(id)
+        const project = await Projects.findById(id)
         return res.status(200).json(
-            blog
+            project
         );
     } catch (error) {
         logger.error({
@@ -86,7 +83,6 @@ export const FindOne = async (req: Request, res: Response) => {
             message: `${'Cant Find'} , ${error}`,
             consoleLoggerOptions: { label: 'API' }
         });
-
         return res.status(404).json({
             success: false,
             message: 'Cant Find'
@@ -95,28 +91,26 @@ export const FindOne = async (req: Request, res: Response) => {
 
 };
 
-export const EditBlog = async (req: Request, res: Response) => {
-    const { id, blogTitle, blogCategory, description, author, source, links, } = req.body;
-    console.log("Edit BLog")
-
+export const EditProjects = async (req: Request, res: Response) => {
+    const { id, projectTitle, projectCategory, description, author, source, links } = req.body;
+    const image = req.file?.path
+    console.log("Edit projects")
     try {
         if (id) {
-            await Blogs.findByIdAndUpdate(id, {
-                blogTitle: blogTitle,
-                blogCategory: blogCategory,
+            await Projects.findByIdAndUpdate(id, {
+                projectTitle: projectTitle,
+                projectCategory: projectCategory,
                 description: description,
                 author: author,
                 source: source,
                 links: links,
-                // blogImage: req.file?.path,
+                // projectImage: image
             }, (err, result) => {
                 if (err)
                     res.send(err)
+                else
+                    return result
             })
-            return res.status(200).json({
-                success: true,
-                message: 'SuccessFully to Edit'
-            });
         } else {
             return res.status(200).json({
                 success: false,
@@ -136,10 +130,10 @@ export const EditBlog = async (req: Request, res: Response) => {
     }
 };
 
-export const DeleteBlog = async (req: Request, res: Response) => {
+export const DeleteProject = async (req: Request, res: Response) => {
     const id = req.params['0']
     try {
-        const del = await Blogs.deleteOne({ _id: id });
+        const del = await Projects.deleteOne({ _id: id });
         console.log(del)
         return res.status(200).json(
             del

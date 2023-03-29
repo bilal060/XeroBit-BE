@@ -21,3 +21,5 @@
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Edit Failure , Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client","service":"api","timestamp":"2023-03-16T05:37:49.460Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceTitle: Path `serviceTitle` is required., serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-03-27T10:33:14.624Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-03-27T10:37:00.190Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"EditBlog\" (type string) at path \"_id\" for model \"tbl-blog\"","service":"api","timestamp":"2023-03-27T10:48:28.580Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"EditBlog\" (type string) at path \"_id\" for model \"tbl-blog\"","service":"api","timestamp":"2023-03-27T10:48:30.082Z"}

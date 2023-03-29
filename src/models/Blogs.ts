@@ -13,13 +13,18 @@ export interface IBlogs extends ITimeStampedDocument {
     // Blog Description
     description: string
     // Author
-    author: string
+    author: {
+        authorID: string,
+        position: string,
+        email: string,
+        authorLinks: [{ Site: string, src: string }],
+    }
     // source
     source: string
     // link
-    link: string,
+    links: [{ Site: string, src: string }],
     // blog Image
-    blogImage: string
+    blogImage: string[]
 }
 
 interface IBlogsModel extends Model<IBlogs> { }
@@ -28,10 +33,10 @@ const schema = new Schema<IBlogs>({
     blogTitle: { type: String, required: true },
     blogCategory: { type: String },
     description: { type: String, required: true },
-    author: { type: String, required: true },
+    author: { type: Array<Object>, required: true },
     source: { type: String },
-    link: { type: String },
-    blogImage: { type: String, required: true }
+    links: { type: Array<Object>, default: [] },
+    blogImage: { type: Array<String>, required: true }
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
