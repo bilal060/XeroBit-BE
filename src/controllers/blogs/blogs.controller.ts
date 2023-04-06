@@ -140,6 +140,7 @@ export const EditBlog = async (req: Request, res: Response) => {
 
 export const DeleteBlog = async (req: Request, res: Response) => {
     const id = req.params['0']
+    console.log("delete");
     try {
         const del = await Blogs.deleteOne({ _id: id });
         console.log(del)
