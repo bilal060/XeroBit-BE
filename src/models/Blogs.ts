@@ -32,7 +32,7 @@ interface IBlogsModel extends Model<IBlogs> { }
 const schema = new Schema<IBlogs>({
     blogTitle: { type: String, required: true },
     blogCategory: { type: String },
-    description: { type: String, required: true },
+    description: { type: String},
     author: { type: Array<Object>, required: true },
     source: { type: String },
     links: { type: Array<Object>, default: [] },
