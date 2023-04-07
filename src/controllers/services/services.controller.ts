@@ -72,6 +72,7 @@ export const FindOne = async (req: Request, res: Response) => {
     const id = req.params['0']
     try {
         const services = await Services.findById(id)
+        console.log(services)
         return res.status(200).json(
             services
         );
