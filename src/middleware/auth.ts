@@ -1,9 +1,9 @@
+import { USER_TYPE } from './../constants';
 import { verifyToken } from '../helpers/jwt.helper';
 import { Request, Response } from 'express';
 import HttpStatus from 'http-status';
 import Admin from '../models/Accounts'
 import Credentials from '../models/Credentials'
-import { USER_TYPE } from '../constants'
 
 
 export async function isAuthorized(req: Request, res: Response, next: () => void) {
@@ -22,7 +22,7 @@ export async function isAuthorized(req: Request, res: Response, next: () => void
         }
         res.locals.credentials = credentials;
         let user;
-        if (credentials.type === USER_TYPE.USER_TYPE_ADMIN) {
+        if (credentials.type === USER_TYPE.USER_TYPE_ADMIN || credentials.type === USER_TYPE.USER_TYPE) {
           user = await Admin.findOne({ credentialId: credentials._id })
         } else {
           return res
@@ -69,7 +69,7 @@ export async function isAdmin(req: Request, res: Response, next: () => void) {
             .status(HttpStatus.UNAUTHORIZED)
             .json({ authorization: [{ message: 'Unauthorized' }] });
         }
-        if (credentials.type === 'admin') {
+        if (credentials.type === USER_TYPE.USER_TYPE_ADMIN) {
           return next();
         } else {
           return res

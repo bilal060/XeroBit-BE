@@ -101,7 +101,7 @@ export const Editservices = async (req: Request, res: Response) => {
                 description: description,
                 source: source,
                 links: links,
-                // serviceImage: req.file?.path
+                serviceImage: req.file?.path
             }, (err, result) => {
                 if (err)
                     res.send(err)
