@@ -4,6 +4,7 @@ import adminRoutes from './controllers/accounts/accounts.routes';
 import blogRouter from './controllers/blogs/blogs.routes'
 import serviceRouter from './controllers/services/services.routes'
 import projectRouter from './controllers/Projects/projects.routes'
+import ContactUs from './controllers/contactus/contactus.routes'
 
 const router = Router();
 
@@ -12,6 +13,7 @@ router.use('/admin', adminRoutes);
 router.use('/blog', blogRouter);
 router.use('/service', serviceRouter);
 router.use('/project', projectRouter);
+router.use('/contactus', ContactUs);
 
 
 export default router;

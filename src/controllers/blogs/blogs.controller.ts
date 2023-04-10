@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import logger from '../../logger';
 import Blogs from '../../models/Blogs';
-import { v4 } from 'uuid'
+import { Console } from 'winston/lib/winston/transports';
 
 export const BlogsList = async (req: Request, res: Response) => {
     console.log("Blog List")
@@ -42,8 +42,9 @@ export const BlogsList = async (req: Request, res: Response) => {
 
 };
 export const AddBlog = async (req: Request, res: Response) => {
-    const { blogTitle, blogCategory, description, author, source, links, } = req.body;
+    const { blogTitle, blogCategory, description, author, source, links, blogImage } = req.body;
     console.log("Add Blog")
+    console.log(req.body)
 
     try {
         const createdBlog = new Blogs({
@@ -67,7 +68,7 @@ export const AddBlog = async (req: Request, res: Response) => {
             message: `${'Add Failure'} , ${error}`,
             consoleLoggerOptions: { label: 'API' }
         });
-        return res.status(200).json({
+        return res.status(400).json({
             success: false,
             message: 'Fail to Add'
         });
@@ -98,9 +99,10 @@ export const FindOne = async (req: Request, res: Response) => {
 };
 
 export const EditBlog = async (req: Request, res: Response) => {
-    const { id, blogTitle, blogCategory, description, author, source, links, } = req.body;
+    const { id, blogTitle, blogCategory, description, author, source, links, blogImage } = req.body;
     console.log("Edit BLog")
 
+    console.log(blogImage)
     try {
         if (id) {
             await Blogs.findByIdAndUpdate(id, {
@@ -110,7 +112,7 @@ export const EditBlog = async (req: Request, res: Response) => {
                 author: author,
                 source: source,
                 links: links,
-                // blogImage: req.file?.path,
+                blogImage: blogImage,
             }, (err, result) => {
                 if (err)
                     res.send(err)

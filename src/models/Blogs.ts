@@ -24,7 +24,10 @@ export interface IBlogs extends ITimeStampedDocument {
     // link
     links: [{ Site: string, src: string }],
     // blog Image
-    blogImage: string[]
+    blogImage: {
+        data: Buffer,
+        contentType: String
+    }
 }
 
 interface IBlogsModel extends Model<IBlogs> { }
@@ -32,11 +35,16 @@ interface IBlogsModel extends Model<IBlogs> { }
 const schema = new Schema<IBlogs>({
     blogTitle: { type: String, required: true },
     blogCategory: { type: String },
-    description: { type: String},
+    description: { type: String },
     author: { type: Array<Object>, required: true },
     source: { type: String },
     links: { type: Array<Object>, default: [] },
-    blogImage: { type: Array<String>, required: true }
+    blogImage: {
+        type: {
+            data: Buffer,
+            contentType: String
+        }, required: true
+    }
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch

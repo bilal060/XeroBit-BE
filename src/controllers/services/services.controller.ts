@@ -72,6 +72,7 @@ export const FindOne = async (req: Request, res: Response) => {
     const id = req.params['0']
     try {
         const services = await Services.findById(id)
+        console.log(services)
         return res.status(200).json(
             services
         );
@@ -100,7 +101,7 @@ export const Editservices = async (req: Request, res: Response) => {
                 description: description,
                 source: source,
                 links: links,
-                // serviceImage: req.file?.path
+                serviceImage: req.file?.path
             }, (err, result) => {
                 if (err)
                     res.send(err)

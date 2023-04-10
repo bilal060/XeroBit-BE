@@ -17,7 +17,11 @@ export interface Iservices extends ITimeStampedDocument {
     // link
     links: [{ Site: string, src: string }],
     // service Image
-    serviceImage: string[]
+    serviceImage: {
+        data: Buffer,
+        contentType: String
+    }
+    // serviceImage: [{ images: Buffer }]
 
 }
 
@@ -29,7 +33,12 @@ const schema = new Schema<Iservices>({
     description: { type: String, required: true },
     source: { type: String },
     links: { type: Array<Object>, default: [] },
-    serviceImage: { type: Array<String>, required: true }
+    serviceImage: {
+        type: {
+            data: Buffer,
+            contentType: String
+        }, required: true
+    }
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
