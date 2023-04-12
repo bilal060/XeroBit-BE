@@ -42,7 +42,7 @@ export const ContactUsList = async (req: Request, res: Response) => {
 };
 export const AddContactUs = async (req: Request, res: Response) => {
     const { firstName, lastName, massage, phoneNo, email, visit } = req.body;
-    console.log("Add Blog")
+    console.log(req.body)
 
     try {
         const created = new ContactUs({
