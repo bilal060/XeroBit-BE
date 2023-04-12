@@ -59,7 +59,9 @@ export const AddBlog = async (req: Request, res: Response) => {
         await createdBlog.save();
         return res.status(200).json({
             success: true,
-            message: 'Blog Added Successfully'
+            message: 'Blog Added Successfully',
+            createdBlog:createdBlog
+
         });
 
     } catch (error) {
@@ -99,27 +101,26 @@ export const FindOne = async (req: Request, res: Response) => {
 };
 
 export const EditBlog = async (req: Request, res: Response) => {
-    const { id, blogTitle, blogCategory, description, author, source, links, blogImage } = req.body;
+    const { id, blogTitle, blogCategory, description, author, source, links, } = req.body;
     console.log("Edit BLog")
-
-    console.log(blogImage)
     try {
         if (id) {
-            await Blogs.findByIdAndUpdate(id, {
+        const editBlog =    await Blogs.findByIdAndUpdate(id, {
                 blogTitle: blogTitle,
                 blogCategory: blogCategory,
                 description: description,
                 author: author,
                 source: source,
                 links: links,
-                blogImage: blogImage,
+                blogImage: req.file?.path,
             }, (err, result) => {
                 if (err)
                     res.send(err)
             })
             return res.status(200).json({
                 success: true,
-                message: 'SuccessFully to Edit'
+                message: 'SuccessFully to Edit',
+                editBlog:editBlog
             });
         } else {
             return res.status(200).json({

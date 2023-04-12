@@ -94,6 +94,7 @@ export const FindOne = async (req: Request, res: Response) => {
 };
 
 export const EditProjects = async (req: Request, res: Response) => {
+
     const { id, projectTitle, projectCategory, description, author, source, links } = req.body;
     const image = req.file?.path
     console.log("Edit projects")
