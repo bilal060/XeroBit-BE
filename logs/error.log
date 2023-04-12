@@ -80,3 +80,4 @@
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"edit\" (type string) at path \"_id\" for model \"tbl-services\"","service":"api","timestamp":"2023-04-12T17:03:38.864Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"edit\" (type string) at path \"_id\" for model \"tbl-services\"","service":"api","timestamp":"2023-04-12T17:04:05.673Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"edit\" (type string) at path \"_id\" for model \"tbl-services\"","service":"api","timestamp":"2023-04-12T17:04:23.676Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , TypeError: Cannot read properties of undefined (reading 'data')","service":"api","timestamp":"2023-04-12T18:07:25.342Z"}
