@@ -11,7 +11,8 @@ import util from 'util';
 import app from './app';
 import SafeMongooseConnection from './lib/safe-mongoose-connection';
 import logger from './logger';
-
+import mongoose from 'mongoose';
+mongoose.set('useFindAndModify', false);
 
 const PORT = process.env.PORT || 3000;
 

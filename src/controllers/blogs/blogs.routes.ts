@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as BlogController from './blogs.controller';
-import * as authMiddleware from '../../middleware/auth'
+ import * as authMiddleware from '../../middleware/auth'
 import { upload } from '../../middleware/fileUpload';
 
 const router = Router();
