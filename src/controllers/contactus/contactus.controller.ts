@@ -4,7 +4,11 @@ import ContactUs from '../../models/contact-us';
 import { v4 } from 'uuid'
 
 export const ContactUsList = async (req: Request, res: Response) => {
+
     console.log("Contact List")
+
+    console.log(" List")
+
     try {
         // const contact = await ContactUs.aggregate([
         //     {
