@@ -14,10 +14,7 @@ export interface Iservices extends ITimeStampedDocument {
   // link
   links: [{ Site: string; src: string }];
   // service Image
-  serviceImage: {
-    data: Buffer;
-    contentType: String;
-  };
+  serviceImage?: string;
   sections: ISection[];
 }
 
@@ -27,7 +24,7 @@ const schema = new Schema<Iservices>({
   description: { type: String,},
   source: { type: String },
   links: { type: Array<Object>, default: [] },
-  serviceImage: { type: { data: Buffer, contentType: String }, },
+  serviceImage: { type: String },
   sections: [{ type: Schema.Types.ObjectId, ref: 'Section' }] // reference the Section model
 });
 
