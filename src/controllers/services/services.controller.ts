@@ -75,45 +75,41 @@ export const AddServices = async (req: Request, res: Response) => {
 
 
 export const addSections = async (req: Request, res: Response) => {
-    const { sectionTitle,sectionDescription,sectionImage } = req.body;
-    const section = new Section({ sectionTitle,sectionDescription, sectionImage });
-    await section.save(); 
-    section.save(async (err, savedSection) => {
-        if(err){
-            res.status(500).send(err);
+    const { sectionTitle, sectionDescription, sectionImage } = req.body;
+    const section = new Section({ sectionTitle, sectionDescription, sectionImage });
+  
+    try {
+      const savedSection = await section.save();
+  
+      const sectionId = savedSection._id;
+      let mySectionlId = req.cookies.mySectionlId;
+      if (!mySectionlId) {
+        const createService = new Services({
+          sections: [sectionId]
+        });
+        const savedService = await createService.save();
+        mySectionlId = savedService._id.toString();
+        res.cookie('mySectionlId', mySectionlId);
+        res.send(savedService);
+      } else {
+        const service: Iservices | null = await Services.findById(mySectionlId);
+        if (service) {
+          service.sections.push(sectionId); // add the section id to the service's sections array
+          await service.save(); // save the service with the new section
+          res.status(200).json(savedSection); // send the saved section as response
+        } else {
+          res.status(404).json({ message: 'Service not found' });
         }
-        else{
-            const sectionId = savedSection._id;
-            let mySectionlId = req.cookies.myModelId;
-        if (!mySectionlId) {
-            const createService = new Services({
-              section: [sectionId]
-            });
-            createService.save((err, savedService) => {
-            if (err) {
-              res.status(500).send(err);
-            } else {
-            mySectionlId = createService._id.toString();
-              res.cookie('mySectionlId', mySectionlId);
-              res.send(savedService);
-            }
-          });
-        }else{
-            const service: Iservices | null = await Services.findById(mySectionlId);
-            if (service) {
-                service.sections.push(savedSection._id); // add the section id to the service's sections array
-                 service.save(); // save the service with the new section
-                res.status(200).json(savedSection); // send the saved section as response
-              } else {
-                res.status(404).json({ message: 'Service not found' });
-              }
-        }   
-}})
-}
+      }
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  };
+  
 export const addService = async (req: Request, res: Response) => {
 const { serviceTitle, serviceCategory, description, source, links } = req.body;
 console.log("Add services")
-const serviceID = req.cookies.myModelId;
+const serviceID = req.cookies.mySectionlId;
 if(!serviceID){
     const createdservices = new Services({
         serviceTitle: serviceTitle,
@@ -139,7 +135,7 @@ if(!serviceID){
                 links: req.body.links,
                 serviceImage: req.file?.path
               }, { new: true });
-                res.clearCookie('myModelId');
+                res.clearCookie('mySectionlId');
                 res.send(service);
               }
           }

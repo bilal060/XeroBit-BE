@@ -3,10 +3,7 @@ import { Schema, model } from 'mongoose';
 export interface ISection {
   sectionTitle: string;
   sectionDescription: string;
-  sectionImage: {
-    data: Buffer;
-    contentType: string;
-  };
+  sectionImage: string
 }
 
 const sectionSchema = new Schema<ISection>({
@@ -14,10 +11,8 @@ const sectionSchema = new Schema<ISection>({
   sectionDescription: { type: String, required: true },
   sectionImage: {
     type: {
-      data: Buffer,
-      contentType: String
+      type: String
     },
-    required: true
   }
 });
 
