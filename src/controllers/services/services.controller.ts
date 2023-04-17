@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import logger from '../../logger';
-import Services from '../../models/services';
+import Services, { Iservices } from '../../models/services';
+import Section from '../../models/section';
 
 export const ServicesList = async (req: Request, res: Response) => {
     console.log("services List")
@@ -38,75 +39,111 @@ export const ServicesList = async (req: Request, res: Response) => {
     }
 
 };
-// export const AddServices = async (req: Request, res: Response) => {
-//     const { serviceTitle, serviceCategory, description, source, links } = req.body;
-//     console.log("Add services")
-//     try {
-//         const createdservices = new Services({
-//             serviceTitle: serviceTitle,
-//             serviceCategory: serviceCategory,
-//             description: description,
-//             source: source,
-//             links: links,
-//             serviceImage: req.file?.path
-//         })
-//         await createdservices.save();
-//         return res.status(200).json({
-//             success: false,
-//             message: 'services Added Successfully'
-//         });
-//     } catch (error) {
-//         logger.error({
-//             level: 'debug',
-//             message: `${'Add Failure'} , ${error}`,
-//             consoleLoggerOptions: { label: 'API' }
-//         });
-//         return res.status(200).json({
-//             success: false,
-//             message: 'Fail to Add'
-//         });
-//     }
 
-// };
+
+
 export const AddServices = async (req: Request, res: Response) => {
-    const { serviceTitle, serviceCategory, description, source, links, sections } = req.body;
+    const { serviceTitle, serviceCategory, description, source, links } = req.body;
     console.log("Add services")
     try {
-        const createdSections = await Promise.all(
-            sections.map(async (section: any) => {
-                const { sectionTitle, sectionDescription } = section;
-                const sectionImage = section.sectionImage ? { data: Buffer.from(section.sectionImage.data, 'base64'), contentType: section.sectionImage.contentType } : undefined;
-                const createdSection = new section({
-                    sectionTitle,
-                    sectionDescription,
-                    sectionImage
-                });
-                return await createdSection.save();
-            })
-        );
-        const serviceImage = req.file ? { data: req.file.buffer, contentType: req.file.mimetype } : undefined;
-        const createdService = new Services({
-            serviceTitle,
-            serviceCategory,
-            description,
-            source,
-            links,
-            serviceImage,
-            sections: createdSections.map((section: any) => section._id)
-        });
-        await createdService.save();
+        const createdservices = new Services({
+            serviceTitle: serviceTitle,
+            serviceCategory: serviceCategory,
+            description: description,
+            source: source,
+            links: links,
+            serviceImage: req.file?.path
+        })
+        await createdservices.save();
         return res.status(200).json({
-            success: true,
-            message: 'Service added successfully'
+            success: false,
+            message: 'services Added Successfully'
         });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({
+        logger.error({
+            level: 'debug',
+            message: `${'Add Failure'} , ${error}`,
+            consoleLoggerOptions: { label: 'API' }
+        });
+        return res.status(200).json({
             success: false,
-            message: 'Failed to add service'
+            message: 'Fail to Add'
         });
     }
+
 };
+
+
+export const addSections = async (req: Request, res: Response) => {
+    const { sectionTitle,sectionDescription,sectionImage } = req.body;
+    const section = new Section({ sectionTitle,sectionDescription, sectionImage });
+    await section.save(); 
+    section.save(async (err, savedSection) => {
+        if(err){
+            res.status(500).send(err);
+        }
+        else{
+            const sectionId = savedSection._id;
+            let mySectionlId = req.cookies.myModelId;
+        if (!mySectionlId) {
+            const createService = new Services({
+              section: [sectionId]
+            });
+            createService.save((err, savedService) => {
+            if (err) {
+              res.status(500).send(err);
+            } else {
+            mySectionlId = createService._id.toString();
+              res.cookie('mySectionlId', mySectionlId);
+              res.send(savedService);
+            }
+          });
+        }else{
+            const service: Iservices | null = await Services.findById(mySectionlId);
+            if (service) {
+                service.sections.push(savedSection._id); // add the section id to the service's sections array
+                 service.save(); // save the service with the new section
+                res.status(200).json(savedSection); // send the saved section as response
+              } else {
+                res.status(404).json({ message: 'Service not found' });
+              }
+        }   
+}})
+}
+export const addService = async (req: Request, res: Response) => {
+const { serviceTitle, serviceCategory, description, source, links } = req.body;
+console.log("Add services")
+const serviceID = req.cookies.myModelId;
+if(!serviceID){
+    const createdservices = new Services({
+        serviceTitle: serviceTitle,
+        serviceCategory: serviceCategory,
+        description: description,
+        source: source,
+        links: links,
+        serviceImage: req.file?.path
+    })
+    createdservices.save((err, savedService) => {
+              if (err) {
+                res.status(500).send(err);
+              } else {
+                res.send(savedService);
+              }
+            })
+        }else{
+            const service = await Services.findByIdAndUpdate(serviceID, {
+                serviceTitle: req.body.serviceTitle,
+                serviceCategory: req.body.serviceCategory,
+                description: req.body.description,
+                source: req.body.source,
+                links: req.body.links,
+                serviceImage: req.file?.path
+              }, { new: true });
+                res.clearCookie('myModelId');
+                res.send(service);
+              }
+          }
+    
 
 export const FindOne = async (req: Request, res: Response) => {
     const id = req.params['0']
