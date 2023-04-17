@@ -4,28 +4,23 @@ import ContactUs from '../../models/contact-us';
 import { v4 } from 'uuid'
 
 export const ContactUsList = async (req: Request, res: Response) => {
-
-    console.log("Contact List")
-
-    console.log(" List")
-
+    console.log("Blog List")
     try {
-        // const contact = await ContactUs.aggregate([
-        //     {
-        //         "$project": {
-        //             "_id": 1,
-        //             "firstName": 1,
-        //             "lastName": 1,
-        //             "massage": 1,
-        //             "phoneNo": 1,
-        //             "email": 1,
-        //             "visit": 1,
-        //             "createdAt": 1,
-        //             "updatedAt": 1
-        //         }
-        //     }
-        // ])
-        const contact = await ContactUs.find();
+        const contact = await ContactUs.aggregate([
+            {
+                "$project": {
+                    "_id": 1,
+                    "firstName": 1,
+                    "lastName": 1,
+                    "massage": 1,
+                    "phoneNo": 1,
+                    "email": 1,
+                    "visit": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1
+                }
+            }
+        ])
         return res.status(200).json({
             total: contact.length,
             contact

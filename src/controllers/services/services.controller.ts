@@ -1,6 +1,34 @@
-import { Request, Response } from 'express';
+import { Request, Response, response } from 'express';
 import logger from '../../logger';
-import Services from '../../models/services';
+import Services, { Iservices } from '../../models/services';
+import Section, { ISection } from '../../models/section';
+// Handle POST request to add a new section
+export const addTest = async (req: Request, res: Response) => {
+    try{
+
+        const { sectionTitle, sectionDescription } = req.body;
+        let sectionImage = req.file?.path; 
+        const section = new Section({
+            sectionTitle:sectionTitle,
+            sectionDescription:sectionDescription,
+            sectionImage:sectionImage
+        });
+        await section.save();
+        res.status(201).send(section);
+
+
+    }catch(err){
+        res.send(err)
+    }
+   
+  };
+  
+  
+
+
+
+
+
 
 export const ServicesList = async (req: Request, res: Response) => {
     console.log("services List")
@@ -38,75 +66,128 @@ export const ServicesList = async (req: Request, res: Response) => {
     }
 
 };
-// export const AddServices = async (req: Request, res: Response) => {
-//     const { serviceTitle, serviceCategory, description, source, links } = req.body;
-//     console.log("Add services")
-//     try {
-//         const createdservices = new Services({
-//             serviceTitle: serviceTitle,
-//             serviceCategory: serviceCategory,
-//             description: description,
-//             source: source,
-//             links: links,
-//             serviceImage: req.file?.path
-//         })
-//         await createdservices.save();
-//         return res.status(200).json({
-//             success: false,
-//             message: 'services Added Successfully'
-//         });
-//     } catch (error) {
-//         logger.error({
-//             level: 'debug',
-//             message: `${'Add Failure'} , ${error}`,
-//             consoleLoggerOptions: { label: 'API' }
-//         });
-//         return res.status(200).json({
-//             success: false,
-//             message: 'Fail to Add'
-//         });
-//     }
 
-// };
+
+
 export const AddServices = async (req: Request, res: Response) => {
-    const { serviceTitle, serviceCategory, description, source, links, sections } = req.body;
+    const { serviceTitle, serviceCategory, description, source, links } = req.body;
     console.log("Add services")
     try {
-        const createdSections = await Promise.all(
-            sections.map(async (section: any) => {
-                const { sectionTitle, sectionDescription } = section;
-                const sectionImage = section.sectionImage ? { data: Buffer.from(section.sectionImage.data, 'base64'), contentType: section.sectionImage.contentType } : undefined;
-                const createdSection = new section({
-                    sectionTitle,
-                    sectionDescription,
-                    sectionImage
-                });
-                return await createdSection.save();
-            })
-        );
-        const serviceImage = req.file ? { data: req.file.buffer, contentType: req.file.mimetype } : undefined;
-        const createdService = new Services({
-            serviceTitle,
-            serviceCategory,
-            description,
-            source,
-            links,
-            serviceImage,
-            sections: createdSections.map((section: any) => section._id)
-        });
-        await createdService.save();
+        const createdservices = new Services({
+            serviceTitle: serviceTitle,
+            serviceCategory: serviceCategory,
+            description: description,
+            source: source,
+            links: links,
+            serviceImage: req.file?.path
+        })
+        await createdservices.save();
         return res.status(200).json({
-            success: true,
-            message: 'Service added successfully'
+            success: false,
+            message: 'services Added Successfully'
         });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({
+        logger.error({
+            level: 'debug',
+            message: `${'Add Failure'} , ${error}`,
+            consoleLoggerOptions: { label: 'API' }
+        });
+        return res.status(200).json({
             success: false,
-            message: 'Failed to add service'
+            message: 'Fail to Add'
         });
     }
+
 };
+
+
+// const  getService = (req: Request, res: Response) => {
+//   try {
+//     const services = await Services.find();
+//     const result = [];
+//     for (let i = 0; i < services.length; i++) {
+//       const service = services[i];
+//       const sectionIds = service.sections;
+//       const sections = await Section.find({ _id: { $in: sectionIds } });
+//       const serviceWithSections = { ...service.id, sections };
+//       delete serviceWithSections.section;
+//       result.push(serviceWithSections);
+//     }
+//     res.json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+export const addSections = async (req: Request, res: Response) => {
+    const { sectionTitle, sectionDescription } = req.body;
+    let sectionImage = req.file?.path; 
+    const section = new Section({ 
+        sectionTitle:sectionTitle,
+         sectionDescription:sectionDescription,
+          sectionImage:sectionImage });
+  
+    try {
+      const savedSection = await section.save();
+      const sectionId = savedSection._id;
+      let mySectionlId = req.cookies.mySectionlId;
+      if (!mySectionlId) {
+        const createService = new Services({
+          sections: [sectionId]
+        });
+        const savedService = await createService.save();
+        mySectionlId = savedService._id.toString();
+        res.cookie('mySectionlId', mySectionlId);
+        res.send(savedService);
+      } else {
+        const service: Iservices | null = await Services.findById(mySectionlId);
+        if (service) {
+          service.sections.push(sectionId); // add the section id to the service's sections array
+          await service.save(); // save the service with the new section
+          res.status(200).json(savedSection); // send the saved section as response
+        } else {
+          res.status(404).json({ message: 'Service not found' });
+        }
+      }
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  };
+  
+export const addService = async (req: Request, res: Response) => {
+const { serviceTitle, serviceCategory, description, source, links } = req.body;
+let serviceImage = req.file?.path; 
+const serviceID = req.cookies.mySectionlId;
+if(!serviceID){
+    const createdservices = new Services({
+        serviceTitle: serviceTitle,
+        serviceCategory: serviceCategory, 
+        description: description,
+        source: source,
+        links: links,
+        serviceImage: serviceImage
+    })
+    createdservices.save((err, savedService) => {
+              if (err) {
+                res.status(500).send(err);
+              } else {
+                res.send(savedService);
+              }
+            })
+        }else{
+            const service = await Services.findByIdAndUpdate(serviceID, {
+                serviceTitle: req.body.serviceTitle,
+                serviceCategory: req.body.serviceCategory,
+                description: req.body.description,
+                source: req.body.source,
+                links: req.body.links,
+                serviceImage: serviceImage
+              }, { new: true });
+                res.clearCookie('mySectionlId');
+                res.send(service);
+              }
+          }
+    
 
 export const FindOne = async (req: Request, res: Response) => {
     const id = req.params['0']

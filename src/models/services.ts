@@ -1,69 +1,36 @@
-import {
-  Model, Schema, model
-} from 'mongoose';
-import TimeStampPlugin, {
-  ITimeStampedDocument
-} from './plugins/timestamp-plugin';
+import { Schema, model } from 'mongoose';
+import TimeStampPlugin, { ITimeStampedDocument } from './plugins/timestamp-plugin';
+import Section, { ISection } from './section';
 
-interface ISection {
-  sectionTitle: string;
-  sectionDescription: string;
-  sectionImage: {
-    data: Buffer;
-    contentType: string;
-  };
-}
 export interface Iservices extends ITimeStampedDocument {
   /** Name of the BLog Title */
   serviceTitle: string;
   // service Category
-  serviceCategory: string
+  serviceCategory: string;
   // service Description
-  description: string
+  description: string;
   // source
-  source: string
+  source: string;
   // link
-  links: [{ Site: string, src: string }],
+  links: [{ Site: string; src: string }];
   // service Image
-  serviceImage: {
-    data: Buffer,
-    contentType: String
-  }
-  // serviceImage: [{ images: Buffer }]
+  serviceImage?: string;
   sections: ISection[];
-
 }
 
-interface IservicesModel extends Model<Iservices> { }
-const sectionSchema = new Schema<ISection>({
-  sectionTitle: { type: String, required: true },
-  sectionDescription: { type: String, required: true },
-  sectionImage: {
-    type: {
-      data: Buffer,
-      contentType: String
-    },
-    required: true
-  }
-});
 const schema = new Schema<Iservices>({
-  serviceTitle: { type: String, required: true },
+  serviceTitle: { type: String,},
   serviceCategory: { type: String },
-  description: { type: String, required: true },
+  description: { type: String,},
   source: { type: String },
   links: { type: Array<Object>, default: [] },
-  serviceImage: {
-    type: {
-      data: Buffer,
-      contentType: String
-    }, required: true
-  },
-  sections: { type: [sectionSchema], default: [] }
+  serviceImage: { type: String },
+  sections: [{ type: Schema.Types.ObjectId, ref: 'Section' }] // reference the Section model
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
 schema.plugin(TimeStampPlugin);
 
-const Services: IservicesModel = model<Iservices, IservicesModel>('tbl-services', schema);
+const Services = model<Iservices>('tbl-services', schema);
 
 export default Services;
