@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import logger from '../../logger';
 import Blogs from '../../models/Blogs';
-import { Console } from 'winston/lib/winston/transports';
+import { Console } from 'winston/lib/winston/transports'; 
 
 export const BlogsList = async (req: Request, res: Response) => {
     console.log("Blog List")
