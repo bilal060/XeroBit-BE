@@ -10,4 +10,4 @@ router.route('/edit').post(authMiddleware.isAuthorized, ContactUsController.Edit
 router.route('/*').get(ContactUsController.FindOne);
 router.route('/*').delete(authMiddleware.isAuthorized, ContactUsController.DeleteContactUs);
 
-export default router
+export default router 
