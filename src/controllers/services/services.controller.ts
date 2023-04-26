@@ -4,7 +4,7 @@ import Services, { Iservices } from '../../models/services';
 import Section, { ISection } from '../../models/section';
 
 
-//     console.log("services List")
+
 //     try {
 //         const services = await Services.aggregate([
 //             {
@@ -89,7 +89,9 @@ export const ServicesList = async (req: Request, res: Response) => {
         delete serviceWithSections.section;
         result.push(serviceWithSections);
       }
-      res.json(result);
+      res.json({
+        services:result
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
