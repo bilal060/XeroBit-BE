@@ -41,22 +41,22 @@ export const ContactUsList = async (req: Request, res: Response) => {
 
 };
 export const AddContactUs = async (req: Request, res: Response) => {
-    const { firstName, lastName, massage, phoneNo, email, visit } = req.body;
+    const { firstName, lastName, massage, phoneNo, email } = req.body;
+    console.log("Add Contact Us")
+    console.log(firstName, lastName, massage, phoneNo, email)
     try {
-        const created =  new  ContactUs({
+        const created = new ContactUs({
             firstName: firstName,
             lastName: lastName,
             massage: massage,
             phoneNo: phoneNo,
-            email: email,
-            visit: visit,
-
+            email: email
         })
         await created.save();
         return res.status(200).json({
             success: true,
             message: 'contact Added Successfully',
-            created:created
+            created: created
 
         });
 

@@ -4,6 +4,7 @@ import Section, { ISection } from './section';
 
 export interface Iservices extends ITimeStampedDocument {
   /** Name of the BLog Title */
+  _doc: any;
   serviceTitle: string;
   // service Category
   serviceCategory: string;
