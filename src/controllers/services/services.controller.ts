@@ -23,7 +23,7 @@ export const ServicesList = async (req: Request, res: Response) => {
         ])
         return res.status(200).json({
             total: services.length,
-            services:services
+            services
         }
         );
     } catch (error) {
