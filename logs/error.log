@@ -81,3 +81,22 @@
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"edit\" (type string) at path \"_id\" for model \"tbl-services\"","service":"api","timestamp":"2023-04-12T17:04:05.673Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"edit\" (type string) at path \"_id\" for model \"tbl-services\"","service":"api","timestamp":"2023-04-12T17:04:23.676Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , TypeError: Cannot read properties of undefined (reading 'data')","service":"api","timestamp":"2023-04-12T18:07:25.342Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T07:34:47.872Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T07:39:49.441Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: blogImage: Path `blogImage` is required.","service":"api","timestamp":"2023-04-17T07:39:53.018Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: blogImage: Path `blogImage` is required.","service":"api","timestamp":"2023-04-17T07:40:21.992Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: blogImage: Path `blogImage` is required.","service":"api","timestamp":"2023-04-17T07:54:09.691Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:00:23.798Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: blogImage: Path `blogImage` is required.","service":"api","timestamp":"2023-04-17T08:02:21.708Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: blogImage: Path `blogImage` is required.","service":"api","timestamp":"2023-04-17T08:05:58.738Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:06:45.234Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:10:43.166Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:13:53.040Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:17:43.285Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:19:26.098Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:21:59.863Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:34:32.561Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:39:35.860Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:50:13.411Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:55:18.014Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:59:50.951Z"}
