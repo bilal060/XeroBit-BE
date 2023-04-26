@@ -14,6 +14,8 @@
   //     };
   //   }
   export interface Iservices extends ITimeStampedDocument {
+      _doc: any;
+      sections: any;
       /** Name of the BLog Title */
       serviceTitle: string;
       // service Category
