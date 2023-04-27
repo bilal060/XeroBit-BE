@@ -189,14 +189,18 @@ export const Editservices = async (req: Request, res: Response) => {
     }
 };
 export const DeleteService = async (req: Request, res: Response) => {
-    const id = req.params['0']
+    const id = req.params['0'];
     try {
+        const serviceToDelete = await Services.findOne({ _id: id });
+        if(!serviceToDelete){
+            return res.status(404).json({
+                success: false,
+                message: 'Cant Find'
+            });
+        }
         const del = await Services.deleteOne({ _id: id });
-        console.log(del)
-        res.clearCookie('mySectionlId')
-        return res.status(200).json(
-            del
-        );
+        await Section.deleteMany({ _id: { $in: serviceToDelete.sections } });
+        return res.status(200).json(del);
     } catch (error) {
         logger.error({
             level: 'debug',
@@ -208,8 +212,8 @@ export const DeleteService = async (req: Request, res: Response) => {
             message: 'Cant Find'
         });
     }
-
 };
+
 
 
 
