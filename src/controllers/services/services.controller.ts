@@ -97,8 +97,8 @@ export const ServicesList = async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
-export const AddServices = async (req: Request, res: Response) => {
-const { serviceTitle, serviceCategory, description, source, links } = req.body;
+export const    AddServices = async (req: Request, res: Response) => {
+let { serviceTitle, serviceCategory, description, source, links } = req.body;
 let serviceImage = req.file?.path; 
 const serviceID = req.cookies.mySectionlId;
 if(!serviceID){
@@ -130,6 +130,7 @@ if(!serviceID){
                 res.send(service);
               }
   }
+
 export const FindOneService = async (req: Request, res: Response) => {
     const id = req.params['0']
     try {

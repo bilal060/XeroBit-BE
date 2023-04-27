@@ -32,6 +32,6 @@ const schema = new Schema<Iservices>({
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
 schema.plugin(TimeStampPlugin);
 
-const Services = model<Iservices>('tbl-services', schema);
+const   Services = model<Iservices>('tbl-services', schema);
 
 export default Services;
