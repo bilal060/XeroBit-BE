@@ -1,29 +1,36 @@
 import multer from 'multer';
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './src/uploads/')
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + file.originalname)
-    }                       
-  })
+
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, './src/uploads/')
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, Date.now() + file.originalname)
+//     }                       
+//   })
                   
-export const upload = multer({ storage: storage })
-const service = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/service')
+// export const upload = multer({ storage: storage })
+
+
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'uploads/'); // Specify the upload directory
   },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
+  filename: function(req, file, cb) {
+    cb(null, file.originalname); // Use the original file name
   }
-})
-export const serviceUpload = multer({ 
-  storage: service, 
-  fileFilter: function (req, file, cb) {
-    if (file.fieldname === 'serviceImage') {
-      cb(null, true);
-    } else {
-      cb(new Error('Unexpected field'));
-    }
+});
+export const upload = multer({ storage: storage });
+
+
+
+const service = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'uploads/section'); // Specify the upload directory
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname); // Use the original file name
   }
-})
+});
+export const serviceUpload = multer({ storage: service });
