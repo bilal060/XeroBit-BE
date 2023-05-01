@@ -3,105 +3,21 @@ import logger from '../../logger';
 import Services, { Iservices } from '../../models/services';
 import Section, { ISection } from '../../models/section';
 
-
-
-//     try {
-//         const services = await Services.aggregate([
-//             {
-//                 "$project": {
-//                     "_id": 1,
-//                     "serviceTitle": 1,
-//                     "serviceCategory": 1,
-//                     "description": 1,
-//                     "source": 1,
-//                     "links": 1,
-//                     "serviceImage": 1,
-//                     "createdAt": 1,
-//                     "updatedAt": 1
-//                 }
-//             }
-//         ])
-//         return res.status(200).json({
-//             total: services.length,
-//             services
-//         }
-//         );
-//     } catch (error) {
-//         logger.error({
-//             level: 'debug',
-//             message: `${'Cant Find'} , ${error}`,
-//             consoleLoggerOptions: { label: 'API' }
-//         });
-//         return res.status(404).json({
-//             success: false,
-//             message: 'Cant Find'
-//         });
-//     }
-
-// };
-
-
-
-// export const AddServices = async (req: Request, res: Response) => {
-//     const { serviceTitle, serviceCategory, description, source, links } = req.body;
-//     console.log("Add services")
-//     try {
-//         const createdservices = new Services({
-//             serviceTitle: serviceTitle,
-//             serviceCategory: serviceCategory,
-//             description: description,
-//             source: source,
-//             links: links,
-//             serviceImage: req.file?.path
-//         })
-//         await createdservices.save();
-//         return res.status(200).json({
-//             success: false,
-//             message: 'services Added Successfully'
-//         });
-//     } catch (error) {
-//         logger.error({
-//             level: 'debug',
-//             message: `${'Add Failure'} , ${error}`,
-//             consoleLoggerOptions: { label: 'API' }
-//         });
-//         return res.status(200).json({
-//             success: false,
-//             message: 'Fail to Add'
-//         });
-//     }
-
-// };
-
-export const ServicesList = async (req: Request, res: Response) => {
+export const ServicesList =async (req: Request, res: Response) => {
     try {
       const services = await Services.find();
-      const result = [];
-      for (let i = 0; i < services.length; i++) {
-        const service = services[i];
-        const sectionIds = service.sections;
-        const sections = await Section.find({ _id: { $in: sectionIds } });
-        const sectionsData = sections.map(section => {
-          const { _id,sectionTitle, sectionDescription, sectionImage } = section;
-          return {_id , sectionTitle, sectionDescription, sectionImage };
-        });
-        const serviceWithSections = { ...service._doc, sections: sectionsData };
-        delete serviceWithSections.section;
-        result.push(serviceWithSections);
-      }
       res.json({
-        services:result
+        services:services
       });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
   };
-export const    AddServices = async (req: Request, res: Response) => {
+export const AddServices = async (req: Request, res: Response) => {
 let { serviceTitle, serviceCategory, description, source, links } = req.body;
 let serviceImage = req.file?.path; 
-const serviceID = req.cookies.mySectionlId;
-if(!serviceID){
+console.log(serviceImage)
     const createdservices = new Services({
         serviceTitle: serviceTitle,
         serviceCategory: serviceCategory, 
@@ -117,27 +33,40 @@ if(!serviceID){
                 res.send(savedService);
               }
             })
-        }else{
-            const service = await Services.findByIdAndUpdate(serviceID, {
-                serviceTitle: req.body.serviceTitle,
-                serviceCategory: req.body.serviceCategory,
-                description: req.body.description,
-                source: req.body.source,
-                links: req.body.links,
-                serviceImage: serviceImage
-              }, { new: true });
-                res.clearCookie('mySectionlId');
-                res.send(service);
-              }
   }
-
-export const FindOneService = async (req: Request, res: Response) => {
-    const id = req.params['0']
+export const DeleteAllServices = async (req: Request, res: Response) => {
     try {
-        const services = await Services.findById(id)
-        console.log(services)
-        return res.status(200).json(
-            services
+      const servicesToDelete = await Services.find();
+      if (servicesToDelete.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'No services found',
+        });
+      }
+      const serviceIds = servicesToDelete.map((service) => service._id);
+      await Services.deleteMany({});
+      await Section.deleteMany({ service: { $in: serviceIds } });
+      return res.status(200).json({
+        success: true,
+        message: 'All services and their sections have been deleted successfully',
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        message: 'An error occurred while deleting all services and their sections',
+      });
+    }
+  };
+  
+export const FindOneService = async (req: Request, res: Response) => {
+    try {
+       
+        const service = await Services.findOne({ _id: req.params.id });
+        return res.status(200).json({
+            service
+        }
+          
         );
     } catch (error) {
         logger.error({
@@ -152,12 +81,34 @@ export const FindOneService = async (req: Request, res: Response) => {
     }
 
 };
+export const FindOneSection = async (req: Request, res: Response) => {
+  try {
+     
+      const section = await Section.findOne({ _id: req.params.id });
+      return res.status(200).json({
+        section
+      }
+        
+      );
+  } catch (error) {
+      logger.error({
+          level: 'debug',
+          message: `${'Cant Find'} , ${error}`,
+          consoleLoggerOptions: { label: 'API' }
+      });
+      return res.status(404).json({
+          success: false,
+          message: 'Cant Find'
+      });
+  }
+
+};
 export const Editservices = async (req: Request, res: Response) => {
-    const { id, serviceTitle, serviceCategory, description, source, links } = req.body;
-    console.log("Edit services")
+    const { serviceTitle, serviceCategory, description, source, links } = req.body;
     try {                                                                                           
-        if (id) {
-            await Services.findByIdAndUpdate(id, {   
+        if (req.params.id) {
+            await Services.findByIdAndUpdate(req.params.id, {  
+                serviceTitle:serviceTitle, 
                 serviceCategory: serviceCategory,
                 description: description,
                 source: source,                
@@ -167,9 +118,9 @@ export const Editservices = async (req: Request, res: Response) => {
                 if (err)
                     res.send(err)
             })
-                 return res.status(200).json({
+              return res.status(200).json({
                 success: true,
-                message: 'SuccessFully Edit'
+                message: 'SuccessFully Edit',
             });
         } else {
             return res.status(200).json({
@@ -189,17 +140,51 @@ export const Editservices = async (req: Request, res: Response) => {
         });
     }
 };
+export const Editsection = async (req: Request, res: Response) => {
+  const { serviceContent, imagealignment } = req.body;
+  try {                                                                                           
+      if (req.params.id) {
+          await Section.findByIdAndUpdate(req.params.id, {  
+            serviceImage: req.file?.path,
+            serviceContent: serviceContent,
+            imagealignment: imagealignment,
+          }, (err, result) => {
+              if (err)
+                  res.send(err)
+          })
+          console.log(serviceContent,imagealignment)
+            return res.status(200).json({
+              success: true,
+              message: 'SuccessFully Edit',
+          });
+      } else {
+          return res.status(200).json({
+              success: false,
+              message: 'Id is Null to Edit'
+          });
+      }
+  } catch (error) { 
+      logger.error({               
+          level: 'debug',
+          message: `${'Edit Failure'} , ${error}`,
+          consoleLoggerOptions: { label: 'API' }
+      });                        
+      return res.status(200).json({
+          success: false,
+          message: 'Fail to Edit'
+      });
+  }
+};
 export const DeleteService = async (req: Request, res: Response) => {
-    const id = req.params['0'];
     try {
-        const serviceToDelete = await Services.findOne({ _id: id });
+        const serviceToDelete = await Services.findOne({ _id: req.params.id });
         if(!serviceToDelete){
             return res.status(404).json({
                 success: false,
                 message: 'Cant Find'
             });
         }
-        const del = await Services.deleteOne({ _id: id });
+        const del = await Services.deleteOne({ _id: req.params.id });
         await Section.deleteMany({ _id: { $in: serviceToDelete.sections } });
         return res.status(200).json(del);
     } catch (error) {
@@ -214,6 +199,66 @@ export const DeleteService = async (req: Request, res: Response) => {
         });
     }
 };
+export const DeleteSection = async (req: Request, res: Response) => {
+    try {
+        const sectionToDelete = await Section.findOne({ _id: req.params.id });
+        if(!sectionToDelete){
+            return res.status(404).json({
+                success: false,
+                message: 'Cant Find'
+            });
+        }
+        const del = await Section.deleteOne({ _id: req.params.id });
+        return res.status(200).json(del);
+    } catch (error) {
+        logger.error({
+            level: 'debug',
+            message: `${'Cant Find'} , ${error}`,
+            consoleLoggerOptions: { label: 'API' }
+        });
+        return res.status(404).json({
+            success: false,
+            message: 'Cant Find'
+        });
+    }
+};
+export const AddServiceSection = async (req: Request, res: Response) => {
+    console.log('AddServiceSection')
+    try {
+      const service = await Services.findOne({ _id: req.params.id });
+      if (!service) {
+        return res.status(404).json({
+          success: false,
+          message: 'Service not found'
+        });
+      }
+      const serviceSectionImage = req.file?.path; 
+      const newSection = new Section({
+        serviceImage: serviceSectionImage,
+        serviceContent: req.body.serviceContent,
+        imagealignment: req.body.imagealignment
+      });
+      const savedSection = await newSection.save();
+      service.sections.push(savedSection._id);
+      await service.save();
+      return res.status(200).json({
+        success: true,
+        message: 'Service section created successfully',
+        data: savedSection
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: 'Server error'
+      });
+    }
+  };
+  
+  
+
+
+
 
 
 
