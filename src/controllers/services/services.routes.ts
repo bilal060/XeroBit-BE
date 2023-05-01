@@ -6,7 +6,7 @@ import { upload } from '../../middleware/fileUpload';
 const router = Router();
 
 router.route('').get(servicesController.ServicesList);
-router.route('').post(authMiddleware.isAuthorized, upload.single('serviceImage'), servicesController.AddServices);
+router.route('').post(authMiddleware.isAuthorized, servicesController.AddServices);
 router.route('').delete(authMiddleware.isAuthorized, servicesController.DeleteAllServices);
 router.route('/:id').patch(authMiddleware.isAuthorized, upload.single('serviceImage'), servicesController.Editservices);
 router.route('/:id').get(servicesController.FindOneService);

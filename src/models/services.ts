@@ -3,22 +3,15 @@ import TimeStampPlugin, { ITimeStampedDocument } from './plugins/timestamp-plugi
 import  { ISection } from './section';
 
 export interface Iservices extends ITimeStampedDocument {
+  /** Name of the BLog Title */
   _doc: any;
-  serviceTitle: string;
-  serviceCategory: string;
-  description: string;
-  source: string;
-  links: [{ Site: string; src: string }];
-  serviceImage?: string;
+  servicename: string;
+  slug: string;
   sections: ISection[];
 }
 const schema = new Schema<Iservices>({
-  serviceTitle: { type: String,},
-  serviceCategory: { type: String },
-  description: { type: String,},
-  source: { type: String },
-  links: { type: Array<Object>, default: [] },
-  serviceImage: { type: String },
+  servicename: { type: String,},
+  slug: { type: String },
   sections: [{ type: Schema.Types.ObjectId, ref: 'Section' }]
 });
 

@@ -15,25 +15,25 @@ export const ServicesList =async (req: Request, res: Response) => {
     }
   };
 export const AddServices = async (req: Request, res: Response) => {
-let { serviceTitle, serviceCategory, description, source, links } = req.body;
-let serviceImage = req.file?.path; 
-console.log(serviceImage)
+  try{
+    let { servicename, slug } = req.body;
     const createdservices = new Services({
-        serviceTitle: serviceTitle,
-        serviceCategory: serviceCategory, 
-        description: description,
-        source: source,
-        links: links,
-        serviceImage: serviceImage
+      servicename: servicename,
+      slug: slug,
     })
-    createdservices.save((err, savedService) => {
-              if (err) {
-                res.status(500).send(err);
-              } else {
-                res.send(savedService);
-              }
-            })
+   createdservices.save((err, savedService) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(savedService);
+      }
+    })
+  }catch(err){
+    res.status(500).send(err);
   }
+
+  }
+
 export const DeleteAllServices = async (req: Request, res: Response) => {
     try {
       const servicesToDelete = await Services.find();
@@ -104,16 +104,12 @@ export const FindOneSection = async (req: Request, res: Response) => {
 
 };
 export const Editservices = async (req: Request, res: Response) => {
-    const { serviceTitle, serviceCategory, description, source, links } = req.body;
+    const { servicename, slug } = req.body;
     try {                                                                                           
         if (req.params.id) {
             await Services.findByIdAndUpdate(req.params.id, {  
-                serviceTitle:serviceTitle, 
-                serviceCategory: serviceCategory,
-                description: description,
-                source: source,                
-                links: links,
-                serviceImage: req.file?.path
+              servicename:servicename, 
+              slug: slug,
             }, (err, result) => {
                 if (err)
                     res.send(err)
