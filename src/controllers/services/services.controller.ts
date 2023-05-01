@@ -199,29 +199,7 @@ export const DeleteService = async (req: Request, res: Response) => {
         });
     }
 };
-// export const DeleteSection = async (req: Request, res: Response) => {
-//     try {
-//         const sectionToDelete = await Section.findOne({ _id: req.params.id });
-//         if(!sectionToDelete){
-//             return res.status(404).json({
-//                 success: false,
-//                 message: 'Cant Find'
-//             });
-//         }
-//         const del = await Section.deleteOne({ _id: req.params.id });
-//         return res.status(200).json(del);
-//     } catch (error) {
-//         logger.error({
-//             level: 'debug',
-//             message: `${'Cant Find'} , ${error}`,
-//             consoleLoggerOptions: { label: 'API' }
-//         });
-//         return res.status(404).json({
-//             success: false,
-//             message: 'Cant Find'
-//         });
-//     }
-// };
+
 export const DeleteSection = async (req: Request, res: Response) => {
     try {
         const sectionToDelete = await Section.findOne({ _id: req.params.id });
