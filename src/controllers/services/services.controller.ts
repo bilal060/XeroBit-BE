@@ -141,18 +141,18 @@ export const Editservices = async (req: Request, res: Response) => {
     }
 };
 export const Editsection = async (req: Request, res: Response) => {
-  const { serviceContent, imagealignment } = req.body;
+  const { sectionContent, imagealignment } = req.body;
   try {                                                                                           
       if (req.params.id) {
           await Section.findByIdAndUpdate(req.params.id, {  
-            serviceImage: req.file?.path,
-            serviceContent: serviceContent,
+            sectionImage: req.file?.path,
+            sectionContent: sectionContent,
             imagealignment: imagealignment,
           }, (err, result) => {
               if (err)
                   res.send(err)
           })
-          console.log(serviceContent,imagealignment)
+
             return res.status(200).json({
               success: true,
               message: 'SuccessFully Edit',
@@ -199,6 +199,29 @@ export const DeleteService = async (req: Request, res: Response) => {
         });
     }
 };
+// export const DeleteSection = async (req: Request, res: Response) => {
+//     try {
+//         const sectionToDelete = await Section.findOne({ _id: req.params.id });
+//         if(!sectionToDelete){
+//             return res.status(404).json({
+//                 success: false,
+//                 message: 'Cant Find'
+//             });
+//         }
+//         const del = await Section.deleteOne({ _id: req.params.id });
+//         return res.status(200).json(del);
+//     } catch (error) {
+//         logger.error({
+//             level: 'debug',
+//             message: `${'Cant Find'} , ${error}`,
+//             consoleLoggerOptions: { label: 'API' }
+//         });
+//         return res.status(404).json({
+//             success: false,
+//             message: 'Cant Find'
+//         });
+//     }
+// };
 export const DeleteSection = async (req: Request, res: Response) => {
     try {
         const sectionToDelete = await Section.findOne({ _id: req.params.id });
@@ -207,6 +230,13 @@ export const DeleteSection = async (req: Request, res: Response) => {
                 success: false,
                 message: 'Cant Find'
             });
+        }
+        // find the service that includes the deleted section ID
+        const service = await Services.findOne({ sections: { $in: [req.params.id] } });
+        if (service) {
+            // remove the deleted section ID from the service's sections array
+            service.sections = service.sections.filter((_id) => _id.toString() !== req.params.id);
+            await service.save();
         }
         const del = await Section.deleteOne({ _id: req.params.id });
         return res.status(200).json(del);
@@ -222,6 +252,7 @@ export const DeleteSection = async (req: Request, res: Response) => {
         });
     }
 };
+
 export const AddServiceSection = async (req: Request, res: Response) => {
     console.log('AddServiceSection')
     try {
