@@ -5,7 +5,10 @@ import Section, { ISection } from '../../models/section';
 
 export const ServicesList =async (req: Request, res: Response) => {
     try {
-      const services = await Services.find();
+      const services = await Services.find().populate({
+        path: 'sections',
+        model: 'tbl-section'
+      });        
       res.json({
         services:services
       });
@@ -59,28 +62,30 @@ export const DeleteAllServices = async (req: Request, res: Response) => {
     }
   };
   
-export const FindOneService = async (req: Request, res: Response) => {
-    try {
-       
-        const service = await Services.findOne({ _id: req.params.id });
-        return res.status(200).json({
-            service
-        }
-          
-        );
-    } catch (error) {
-        logger.error({
-            level: 'debug',
-            message: `${'Cant Find'} , ${error}`,
-            consoleLoggerOptions: { label: 'API' }
-        });
-        return res.status(404).json({
-            success: false,
-            message: 'Cant Find'
-        });
-    }
 
-};
+  
+  export const FindOneService = async (req: Request, res: Response) => {
+      try {
+        const service = await Services.findOne({ _id: req.params.id }).populate({
+          path: 'sections',
+          model: 'tbl-section'
+        });        
+          return res.status(200).json({
+              service
+          });
+      } catch (error) {
+          logger.error({
+              level: 'debug',
+              message: `${'Cant Find'} , ${error}`,
+              consoleLoggerOptions: { label: 'API' }
+          });
+          return res.status(404).json({
+              success: false,
+              message: 'Cant Find'
+          });
+      }
+  };
+  
 export const FindOneSection = async (req: Request, res: Response) => {
   try {
      
@@ -138,7 +143,8 @@ export const Editservices = async (req: Request, res: Response) => {
 };
 export const Editsection = async (req: Request, res: Response) => {
   const { sectionContent, imagealignment } = req.body;
-  try {                                                                                           
+  try {                           
+                                                                    
       if (req.params.id) {
           await Section.findByIdAndUpdate(req.params.id, {  
             sectionImage: req.file?.path,
@@ -228,7 +234,6 @@ export const DeleteSection = async (req: Request, res: Response) => {
 };
 
 export const AddServiceSection = async (req: Request, res: Response) => {
-    console.log('AddServiceSection')
     try {
       const service = await Services.findOne({ _id: req.params.id });
       if (!service) {
@@ -237,12 +242,13 @@ export const AddServiceSection = async (req: Request, res: Response) => {
           message: 'Service not found'
         });
       }
-      const serviceSectionImage = req.file?.path; 
+      const { sectionContent, imagealignment } = req.body;
       const newSection = new Section({
-        serviceImage: serviceSectionImage,
-        serviceContent: req.body.serviceContent,
-        imagealignment: req.body.imagealignment
+        sectionImage: req.file?.path,
+        sectionContent: sectionContent,
+        imagealignment: imagealignment
       });
+      console.log(req.file?.path)
       const savedSection = await newSection.save();
       service.sections.push(savedSection._id);
       await service.save();

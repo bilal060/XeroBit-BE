@@ -2,8 +2,8 @@ import { Schema, model } from 'mongoose';
 
 export interface ISection {
   _id: any;
-  serviceImage: string,
-  serviceContent: string,
+  sectionImage: string,
+  sectionContent: string,
   imagealignment: {
     type: String,
     enum: ['left', 'right'],
@@ -12,7 +12,7 @@ export interface ISection {
 }
 
 const sectionSchema = new Schema<ISection>({
-  sectionImage: { type: String, required: true },
+  sectionImage: { type: String },
   sectionContent: { type: String, required: true },
   imagealignment: { type: String },
 });

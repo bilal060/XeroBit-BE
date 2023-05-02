@@ -7,7 +7,7 @@ export interface Iservices extends ITimeStampedDocument {
   _doc: any;
   servicename: string;
   slug: string;
-  sections: ISection[];
+  sections: any[];
 }
 const schema = new Schema<Iservices>({
   servicename: { type: String,},
