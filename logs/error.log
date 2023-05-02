@@ -102,3 +102,4 @@
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Add Failure , ValidationError: serviceImage: Path `serviceImage` is required.","service":"api","timestamp":"2023-04-17T08:59:50.951Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"add\" (type string) at path \"_id\" for model \"tbl-section\"","service":"api","timestamp":"2023-04-27T07:02:14.923Z"}
 {"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"add\" (type string) at path \"_id\" for model \"tbl-section\"","service":"api","timestamp":"2023-04-27T07:02:14.539Z"}
+{"consoleLoggerOptions":{"label":"API"},"level":"error","message":"Cant Find , CastError: Cast to ObjectId failed for value \"add\" (type string) at path \"_id\" for model \"tbl-section\"","service":"api","timestamp":"2023-04-27T10:07:05.057Z"}
