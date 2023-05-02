@@ -1,15 +1,20 @@
 import { Schema, model } from 'mongoose';
 
 export interface ISection {
-  sectionTitle: string;
-  sectionDescription: string;
-  sectionImage?: string;
+  _id: any;
+  sectionImage: string,
+  sectionContent: string,
+  imagealignment: {
+    type: String,
+    enum: ['left', 'right'],
+    default: 'left'
+  }
 }
 
 const sectionSchema = new Schema<ISection>({
-  sectionTitle: { type: String, required: true },
-  sectionDescription: { type: String, required: true },
   sectionImage: { type: String },
+  sectionContent: { type: String, required: true },
+  imagealignment: { type: String },
 });
 
 const Section = model<ISection>('tbl-section', sectionSchema);
