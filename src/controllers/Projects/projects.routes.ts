@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import * as ProjectsController from './projects.controller';
 import * as authMiddleware from '../../middleware/auth'
@@ -19,4 +20,4 @@ router.route('/:id/projectsection/:id').delete(ProjectsController.DeleteProjectS
 router.route('/:id/projectsection/:id').put(upload.single('ProjectsectionImage'),ProjectsController.EditProjectSection);
 
 
-export default router
+
