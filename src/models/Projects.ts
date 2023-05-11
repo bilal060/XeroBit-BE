@@ -1,6 +1,6 @@
 import { string } from '@hapi/joi';
 import {
-    Model, Schema, model
+    Model, Schema, Types, model
 } from 'mongoose';
 import TimeStampPlugin, {
     ITimeStampedDocument
@@ -8,36 +8,40 @@ import TimeStampPlugin, {
 
 export interface IProjects extends ITimeStampedDocument {
     /** Name of the project Title */
+    _doc: any;
     projectTitle: string;
     // project Category
-    projectCategory: string
+    // projectCategory: string
     // project Description
     description: string
     // Author
-    author: {
-        authorID: string,
-        position: string,
-        email: string,
-        authorLinks: [{ Site: string, src: string }],
-    }
+    // author: {
+    //     authorID: string,
+    //     position: string,
+    //     email: string,
+    //     authorLinks: [{ Site: string, src: string }],
+    // }
     // source
-    source: string
-    // link
-    links: string
+    // source: string
+    // // link
+    // links: string
     // project Image
-    projectImage: string[]
+    projectImage: string
+    ProjectSections: Types.ObjectId[];
+
 }
 
 interface IProjectsModel extends Model<IProjects> { }
 
 const schema = new Schema<IProjects>({
     projectTitle: { type: String, required: true },
-    projectCategory: { type: String },
+    // projectCategory: { type: String },
     description: { type: String, required: true },
-    author: { type: Array<Object>, required: true },
-    source: { type: String },
-    links: { type: String },
-    projectImage: { type: Array<String> }
+    // author: { type: Array<Object>, required: true },
+    // source: { type: String },
+    // links: { type: String },
+    projectImage: { type: String },
+    ProjectSections: [{ type: Schema.Types.ObjectId, ref: 'tbl-projectSection' }],
 });
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
