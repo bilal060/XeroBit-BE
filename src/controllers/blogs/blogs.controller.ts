@@ -102,7 +102,6 @@ export const FindOne = async (req: Request, res: Response) => {
 
 export const EditBlog = async (req: Request, res: Response) => {
     const { id, blogTitle, blogCategory, description, author, source, links, } = req.body;
-    console.log("Edit BLog")
     try {
         if (id) {
         const editBlog =    await Blogs.findByIdAndUpdate(id, {
