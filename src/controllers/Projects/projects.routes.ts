@@ -19,5 +19,5 @@ router.route('/:id/projectsection').post(upload.single('projectSectionImage'), P
 router.route('/:id/projectsection/:id').delete(ProjectsController.DeleteProjectSection);
 router.route('/:id/projectsection/:id').put(upload.single('ProjectsectionImage'),ProjectsController.EditProjectSection);
 
-
+export default router
 

@@ -142,7 +142,7 @@ export const Editservices = async (req: Request, res: Response) => {
     }
 };
 export const Editsection = async (req: Request, res: Response) => {
-  const { sectionContent, imagealignment } = req.body;
+  const { sectionContent,sectionTitle,sectionSubTitle, imagealignment } = req.body;
   try {                           
                                                                     
       if (req.params.id) {
@@ -150,6 +150,8 @@ export const Editsection = async (req: Request, res: Response) => {
             sectionImage: req.file?.path,
             sectionContent: sectionContent,
             imagealignment: imagealignment,
+            sectionTitle: sectionTitle,
+            sectionSubTitle: sectionSubTitle,
           }, (err, result) => {
               if (err)
                   res.send(err)
@@ -242,10 +244,12 @@ export const AddServiceSection = async (req: Request, res: Response) => {
           message: 'Service not found'
         });
       }
-      const { sectionContent, imagealignment } = req.body;
+      const { sectionContent,sectionTitle,sectionSubTitle, imagealignment } = req.body;
       const newSection = new Section({
         sectionImage: req.file?.path,
         sectionContent: sectionContent,
+        sectionTitle: sectionTitle,
+        sectionSubTitle: sectionSubTitle,
         imagealignment: imagealignment
       });
       console.log(req.file?.path)
