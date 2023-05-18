@@ -33,11 +33,13 @@ export const AddProjectSection = async (req: Request, res: Response) => {
                 message: 'Service not found'
             });
         }
-        const { projectSectionContent, projectImagealignment } = req.body;
+        const { projectSectionContent, projectImagealignment,projectSectionTitle,projectSectionSubTitle } = req.body;
         const newSection = new projectSection({
             projectSectionImage: req.file?.path,
             projectSectionContent: projectSectionContent,
-            projectImagealignment: projectImagealignment
+            projectImagealignment: projectImagealignment,
+            projectSectionTitle: projectSectionTitle,
+            projectSectionSubTitle: projectSectionSubTitle
         });
         const savedProjectSection = await newSection.save();
         projects.ProjectSections.push(savedProjectSection._id);
@@ -99,12 +101,12 @@ export const DeleteAllProjects = async (req: Request, res: Response) => {
 
 export const FindOneProject = async (req: Request, res: Response) => {
     try {
-        const service = await Projects.findOne({ _id: req.params.id }).populate({
+        const project = await Projects.findOne({ _id: req.params.id }).populate({
             path: 'ProjectSections',
             model: 'tbl-projectSection'
         });
         return res.status(200).json({
-            service
+            project
         });
     } catch (error) {
         logger.error({

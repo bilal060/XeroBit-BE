@@ -4,6 +4,8 @@ export interface IProjectSection {
   _id: Types.ObjectId;
   projectSectionImage: string,
   projectSectionContent: string,
+  projectSectionTitle:String,
+  projectSectionSubTitle:String,
   projectImagealignment: {
     type: String,
     enum: ['left', 'right'],
@@ -12,9 +14,11 @@ export interface IProjectSection {
 }
 
 const projectSectionSchema = new Schema<IProjectSection>({
-  projectSectionImage: { type: String , required: true},
-  projectSectionContent: { type: String, required: true },
-  projectImagealignment: { type: String , required: true},
+  projectSectionImage: { type: String },
+  projectSectionContent: { type: String},
+  projectSectionTitle: { type: String},
+  projectSectionSubTitle: { type: String},
+  projectImagealignment: { type: String },
 });
 
 const projectSection = model<IProjectSection>('tbl-projectSection', projectSectionSchema);
