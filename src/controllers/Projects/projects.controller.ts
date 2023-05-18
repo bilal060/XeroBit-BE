@@ -227,13 +227,13 @@ export const DeleteProjectSection = async (req: Request, res: Response) => {
             });
         }
         // find the service that includes the deleted section ID
-        const project = await Projects.findOne({ sections: { $in: [req.params.id] } });
+        const project = await Projects.findOne({ ProjectSections: { $in: [req.params.id] } });
         if (project) {
             // remove the deleted section ID from the service's sections array
             project.ProjectSections = project.ProjectSections.filter((_id) => _id.toString() !== req.params.id);
             await project.save();
         }
-        const del = await Projects.deleteOne({ _id: req.params.id });
+        const del = await projectSection.deleteOne({ _id: req.params.id });
         return res.status(200).json(del);
     } catch (error) {
         logger.error({
