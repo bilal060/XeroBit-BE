@@ -10,22 +10,7 @@ export interface IProjects extends ITimeStampedDocument {
     /** Name of the project Title */
     _doc: any;
     projectTitle: string;
-    // project Category
-    // projectCategory: string
-    // project Description
     description: string
-    // Author
-    // author: {
-    //     authorID: string,
-    //     position: string,
-    //     email: string,
-    //     authorLinks: [{ Site: string, src: string }],
-    // }
-    // source
-    // source: string
-    // // link
-    // links: string
-    // project Image
     projectImage: string
     ProjectSections: Types.ObjectId[];
 
