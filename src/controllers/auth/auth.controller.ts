@@ -7,7 +7,7 @@ import Accounts from '../../models/Accounts';
 import AuditLogs from '../../models/audit-logs';
 
 interface Userprops {
-  _id: string
+  _id: any
 }
 const getCredentialName = async ({ _id }: Userprops) => {
 
